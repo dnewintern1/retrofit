@@ -51,39 +51,45 @@ public class MainActivity extends AppCompatActivity {
 
                 List<Post> posts = response.body();
 
+
                 for (Post post : posts) {
-
                     String content = post.getContent().getRendered();
-
-
                     Document doc = Jsoup.parse(content);
-
-                  //  Elements elements = doc.getAllElements();
                     Elements questionElements = doc.select("p");
 
                     for (Element questionElement : questionElements) {
                         String questionText = questionElement.text();
-                        // Do something with questionText
-                        textViewResult.append(questionText+"\n");
+                        if (questionText.endsWith("?")) {
+                            textViewResult.append(questionText + "\n");
+                            Element nextElement = questionElement.nextElementSibling();
+                            if (nextElement != null && nextElement.tagName().equals("ul")) {
+                                Elements optionElements = nextElement.select("li");
+                                for (Element optionElement : optionElements) {
+                                    textViewResult.append("Option: " + optionElement.text() + "\n");
+                                }
+                            }
+                        }
                     }
 
+                    Elements solutionElements = doc.select(".wpProQuiz_correct, .wpProQuiz_incorrect");
 
-
-
-//                    for (Element element : elements) {
-//
-//                        String elementText = element.text();
-//
-//
-//                        textViewResult.append(elementText);
-//                    }
+                    for (Element solutionElement : solutionElements) {
+                        String solutionText = solutionElement.text();
+                        textViewResult.append("Solution: " + solutionText + "\n");
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<List<Post>> call, Throwable t) {
-                textViewResult.setText(t+"");
+
             }
+            //...
         });
+
+
+
     }
 }
+
+///From the JSON snippet you’ve provided, it seems you want to parse the HTML content inside the rendered field of the content object
