@@ -1,24 +1,29 @@
 package com.base.retrofitbasics;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Post {
+    public class Content {
+        private String rendered;
 
-    private int userId;
+        public Content(String rendered) {
+            this.rendered = rendered;
+        }
 
-
-    private String content;
-
-    public String getContent() {
-        return content;
+        public String getRendered() {
+            return this.rendered;
+        }
     }
 
-    private int id;
+    private Content content;
 
-    private String title;
+    public Post(Content content) {
+        this.content = content;
+    }
 
-    @SerializedName("body")
-    private String text;
-
-
+    public Content getContent() {
+        return this.content;
+    }
 }
+
+
+
+

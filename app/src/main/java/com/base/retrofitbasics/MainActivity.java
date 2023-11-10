@@ -51,45 +51,38 @@ public class MainActivity extends AppCompatActivity {
 
                 List<Post> posts = response.body();
 
-
-
                 for (Post post : posts) {
-                    String content = post.getContent();
 
-                    // Parse the content with Jsoup
+                    String content = post.getContent().getRendered();
+
+
                     Document doc = Jsoup.parse(content);
 
-                    // Get all elements or select specific elements
-                    Elements elements = doc.getAllElements();
+                  //  Elements elements = doc.getAllElements();
+                    Elements questionElements = doc.select("p");
 
-                    // Define a limit for the number of elements to process
-                    int limit = 10;
-
-                    // Initialize a counter
-                    int count = 0;
-
-                    for (Element element : elements) {
-                        // Do something with each element
-                        String elementText = element.text();
-
-                        // Append the text of each element to the TextView
-                        textViewResult.append(elementText);
-
-                        // Increment the counter
-                        count++;
-
-                        // Break the loop if the limit has been reached
-                        if (count >= limit) {
-                            break;
-                        }
+                    for (Element questionElement : questionElements) {
+                        String questionText = questionElement.text();
+                        // Do something with questionText
+                        textViewResult.append(questionText+"\n");
                     }
-                }
 
+
+
+
+//                    for (Element element : elements) {
+//
+//                        String elementText = element.text();
+//
+//
+//                        textViewResult.append(elementText);
+//                    }
+                }
             }
 
             @Override
             public void onFailure(Call<List<Post>> call, Throwable t) {
-
+                textViewResult.setText(t+"");
             }
         });
     }
